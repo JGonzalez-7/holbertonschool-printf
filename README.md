@@ -9,7 +9,7 @@ Overview
 --------
 This project focuses on building a simplified version of printf.
 It supports essential format specifiers and mimics the standard
-library’s behavior. It provides practical experience with:
+library's behavior. It provides practical experience with:
 
 - Variadic functions (stdarg.h)
 - Manual output handling using write()
@@ -30,6 +30,18 @@ Features
 - Modular source code for easier maintenance
 - Error handling and consistent output formatting
 - Includes test cases for verification
+
+Project Structure
+-----------------
+Each contributor owns a clear slice of the codebase to keep responsibilities explicit:
+
+- `_printf.c` - format-string parser and dispatcher (Person A)
+- `print_char.c`, `print_string.c`, `print_percent.c` - `%c`, `%s`, and `%%` handlers (Person B)
+- `utils.c` - shared helpers such as `_putchar`, `print_number`, and `print_base`
+- `main.c` - manual test harness comparing `_printf` to the libc `printf`
+- `main.h` - central header with structs, prototypes, and documentation
+
+Future specifiers (integers, unsigned, hex, etc.) will follow the same pattern: Person A wires new directives into `_printf.c`, Person B implements the handler file and uses the helpers exposed through `main.h`.
 
 Intended Audience
 -----------------
@@ -54,7 +66,19 @@ Compilation Instructions
 Compile the project using the command shown below
 (used on Ubuntu 20.04 LTS):
 
-gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
+```
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format \
+    main.c _printf.c print_char.c print_string.c print_percent.c utils.c -o printf
+```
+
+The `-Wno-format` flag silences the intentional `%r` format in `main.c` while that specifier is still under development. Remove it once `%r` is implemented.
+
+Usage
+-----
+```
+_printf("Character:[%c] String:[%s] Percent:[%%]\n", 'H', "Holberton");
+```
+The function mirrors the standard `printf` return value semantics: it returns the number of characters written or `-1` on failure (for example if `format` is `NULL`).
 
 Language
 --------
