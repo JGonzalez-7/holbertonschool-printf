@@ -126,7 +126,7 @@ int _putchar(char c);
  * @n: number to print
  * Return: number of characters written
  */
-int print_number(long n);
+int print_number(int n);
 
 /**
  * print_base - prints unsigned numbers in any base
