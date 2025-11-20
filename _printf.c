@@ -4,30 +4,36 @@
  * _printf - produces output according to a format
  * @format: format string to parse
  *
- * Return: number of characters printed
+ * Return: number of printed characters, or -1 on error
  */
 int _printf(const char *format, ...)
 {
 	va_list args;      /* argument list */
 	int i = 0;         /* index for format string */
-	int count = 0;     /* number of printed characters */
+	int count = 0;     /* total printed characters */
 	char *str;         /* string pointer for %s */
 
-	if (!format)       /* handle NULL format */
+	if (!format)       /* handle NULL format string */
 		return (-1);
 
 	va_start(args, format); /* initialize argument list */
 
-	while (format[i])       /* iterate through format string */
+	while (format[i])       /* loop through format string */
 	{
-		if (format[i] == '%')   /* check for format specifier */
+		if (format[i] == '%')   /* found a format specifier */
 		{
-			i++;                /* move to specifier char */
+			if (format[i + 1] == '\0') /* trailing '%' is invalid */
+			{
+				va_end(args);
+				return (-1);
+			}
 
-			if (format[i] == 'c')          /* handle char */
+			i++;                /* move to actual specifier */
+
+			if (format[i] == 'c')          /* char specifier */
 				count += _putchar(va_arg(args, int));
 
-			else if (format[i] == 's')     /* handle string */
+			else if (format[i] == 's')     /* string specifier */
 			{
 				str = va_arg(args, char *);
 				if (!str)
@@ -36,10 +42,10 @@ int _printf(const char *format, ...)
 					count += _putchar(*str++);
 			}
 
-			else if (format[i] == 'd' || format[i] == 'i') /* integer */
-				count += print_number(va_arg(args, int));
+			else if (format[i] == 'd' || format[i] == 'i')
+				count += print_number(va_arg(args, int)); /* integer */
 
-			else if (format[i] == '%')      /* print percent sign */
+			else if (format[i] == '%')     /* percent literal */
 				count += _putchar('%');
 
 			else                            /* invalid specifier */
@@ -48,9 +54,9 @@ int _printf(const char *format, ...)
 		else
 			count += _putchar(format[i]);   /* normal character */
 
-		i++;                                /* next character */
+		i++;                                /* move to next char */
 	}
 
-	va_end(args);                           /* cleanup arguments */
-	return (count);                         /* return count */
+	va_end(args);                           /* cleanup */
+	return (count);                         /* return printed count */
 }
