@@ -71,3 +71,9 @@ This project was completed as a team effort by:
 [LinkedIn Profile](https://www.linkedin.com/in/joshua-gonzalez-398b73267/)
 
 Hello, I’m Joshua Gonzalez, one of the developers who worked on this project. Feel free to explore my work and connect with me on LinkedIn. I’m excited about the possibility of collaborating and exchanging ideas with you.
+
+**Joshua Santiago:** [Github Profile](https://github.com/Rionhaato)
+[LinkedIn Profile](www.linkedin.com/in/joshua-santiago-a268191b6/)
+
+Hello, I’m Joshua Santiago, one of the collaborators on this project alongside my cohort partner. We’re both students at Holberton School San Juan, and this repository is part of our work on the printf project.
+Feel free to explore the code and connect with me on LinkedIn — I’m always open to learning, collaborating, and sharing ideas.
