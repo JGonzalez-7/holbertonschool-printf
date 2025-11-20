@@ -25,11 +25,11 @@ Purpose
 
 Features
 --------
-- Fully custom _printf implementation
-- Supports a subset of printf format specifiers
-- Modular source code for easier maintenance
-- Error handling and consistent output formatting
-- Includes test cases for verification
+- Custom _printf implementation built from scratch
+- Supports basic specifiers: %c, %s, %d, %i, and %%
+- Direct stdout output through write() via _putchar
+- Compact, modular source for easier reading and maintenance
+- Sample main.c included for quick verification
 
 Intended Audience
 -----------------
