@@ -19,7 +19,7 @@ int _putchar(char c)
  * @n: number to print
  * Return: number of characters written or -1 on error
  */
-int print_number(int n)
+int print_num(int n)
 {
 	int count = 0;
 
