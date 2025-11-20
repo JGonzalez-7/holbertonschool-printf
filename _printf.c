@@ -8,33 +8,35 @@
  */
 int _printf(const char *format, ...)
 {
-	va_list args;      /* argument list */
-	int i = 0;         /* index for format string */
-	int count = 0;     /* total printed characters */
-	char *str;         /* string pointer for %s */
+	va_list args;          /* handle variable arguments */
+	int i = 0;             /* index through format string */
+	int count = 0;         /* count of printed characters */
+	char *str;             /* string pointer for %s */
 
-	if (!format)       /* handle NULL format string */
+	if (!format)           /* NULL format string check */
 		return (-1);
 
-	va_start(args, format); /* initialize argument list */
+	va_start(args, format); /* start processing arguments */
 
-	while (format[i])       /* loop through format string */
+	while (format[i])       /* iterate through format text */
 	{
-		if (format[i] == '%')   /* found a format specifier */
+		if (format[i] == '%')   /* found possible specifier */
 		{
-			/* FIX: handle incomplete format: "%" at end */
+			/* handle case where '%' is last character */
 			if (format[i + 1] == '\0')
 			{
 				va_end(args);
 				return (-1);
 			}
 
-			i++;                /* move to actual specifier */
+			i++;                /* move to specifier character */
 
-			if (format[i] == 'c')          /* char specifier */
+			/* character format */
+			if (format[i] == 'c')
 				count += _putchar(va_arg(args, int));
 
-			else if (format[i] == 's')     /* string specifier */
+			/* string format */
+			else if (format[i] == 's')
 			{
 				str = va_arg(args, char *);
 				if (!str)
@@ -43,21 +45,30 @@ int _printf(const char *format, ...)
 					count += _putchar(*str++);
 			}
 
+			/* integer formats (%d, %i) */
 			else if (format[i] == 'd' || format[i] == 'i')
-				count += print_number(va_arg(args, int)); /* integer */
+				count += print_number(va_arg(args, int));
 
-			else if (format[i] == '%')     /* percent literal */
+			/* double percent "%%" */
+			else if (format[i] == '%')
 				count += _putchar('%');
 
-			else                            /* invalid specifier */
+			/* invalid specifier: print '%' + invalid char */
+			else
+			{
+				count += _putchar('%');
 				count += _putchar(format[i]);
+			}
 		}
 		else
-			count += _putchar(format[i]);   /* normal character */
+		{
+			/* regular non-format character */
+			count += _putchar(format[i]);
+		}
 
-		i++;                                /* move to next char */
+		i++;                    /* advance to next character */
 	}
 
-	va_end(args);                           /* cleanup */
-	return (count);                         /* return printed count */
+	va_end(args);               /* clean up argument list */
+	return (count);             /* return total printed chars */
 }
