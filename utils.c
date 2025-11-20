@@ -33,7 +33,7 @@ int print_num(int n)
 
 	if (n / 10)
 	{
-		int printed = print_number(n / 10);
+		int printed = print_num(n / 10);
 
 		if (printed == -1)
 			return (-1);

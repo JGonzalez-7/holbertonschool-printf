@@ -1,0 +1,118 @@
+.TH _PRINTF 3 "November 2025" "Holberton School" "Library Functions Manual"
+.SH NAME
+_printf \- custom formatted output conversion function
+
+.SH SYNOPSIS
+.B #include "main.h"
+.br
+.B int _printf(const char *format, ...);
+
+.SH DESCRIPTION
+.B _printf()
+writes formatted output to the standard output stream.
+It is a lightweight reimplementation of the C library function
+.BR printf (3)
+using a small set of conversion specifiers. Characters in the format string
+that are not part of a conversion directive are written verbatim. Each
+conversion directive begins with the '%' character and is followed by a
+single conversion specifier described below. Output is performed through the
+internal
+.B _putchar()
+helper, which wraps
+.BR write (2)
+to file descriptor 1.
+
+.SH RETURN VALUE
+On success,
+.B _printf()
+returns the number of characters written to stdout.
+If
+.I format
+is
+.BR NULL ,
+or if the final character in the format string is '%' with no following
+specifier, the function returns -1.
+Errors from the underlying
+.B _putchar()
+are not propagated; a failed write decreases the character count but does not
+force an early return.
+
+.SH FORMAT SPECIFIERS
+The implementation supports the following conversion specifiers:
+
+.TP
+.B %c
+Write a single character (argument type:
+.IR int ).
+
+.TP
+.B %s
+Write a null-terminated string (argument type:
+.IR char\ * ).
+If the argument is
+.BR NULL ,
+the string "(null)" is printed.
+
+.TP
+.B %%
+Write a literal percent sign.
+
+.TP
+.B %d
+Write a signed decimal integer (argument type:
+.IR int ).
+
+.TP
+.B %i
+Write a signed decimal integer (synonym for
+.B %d
+).
+
+.SH BEHAVIOR WITH UNSUPPORTED SPECIFIERS
+Any character following '%' that is not one of the supported specifiers is
+printed literally, prefixed by '%'.
+For example, the directive "%q" outputs "%q".
+Both characters contribute to the return count.
+
+.SH LIMITATIONS
+This educational implementation does not support:
+.IP \[bu] 2
+Flags (+, space, #, 0, -)
+.IP \[bu] 2
+Field width or precision
+.IP \[bu] 2
+Length modifiers (h, l, ll, etc.)
+.IP \[bu] 2
+Additional specifiers such as u, o, x, X, p, f, or custom format handling
+.IP \[bu] 2
+Buffered output identical to the C standard library
+.IP \[bu] 2
+Propagation of write errors beyond a reduced character count
+
+.SH EXAMPLES
+Print mixed text and supported specifiers:
+.PP
+.nf
+    _printf("Hello %s!\\n", "world");
+    _printf("Letter: %c, Number: %d%% done\\n", 'A', 75);
+    _printf("Fallback on unknown: %q\\n");
+.fi
+
+.SH NOTES
+Compile the project sources with:
+.PP
+.nf
+    gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c
+.fi
+.PP
+This function is intended for Holberton School coursework and demonstration
+purposes and is not a drop-in replacement for the full standard library
+.BR printf (3).
+
+.SH AUTHORS
+Developed by Joshua Gonzalez and Joshua Santiago for the Holberton School
+printf team project. See README.md for contact links.
+
+.SH SEE ALSO
+.BR printf (3),
+.BR write (2)
