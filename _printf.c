@@ -1,88 +1,46 @@
 #include "main.h"
 
 /**
- * find_printer - locates the correct handler for a specifier
- * @spec: format specifier to match
- * Return: pointer to the matching function, or NULL if none exists
- */
-static int (*find_printer(char spec))(va_list)
-{
-	printer_t printers[] = {
-		{'c', print_char},
-		{'s', print_string},
-		{'%', print_percent},
-		{0, NULL}
-	};
-	int i;
-
-	for (i = 0; printers[i].spec != 0; i++)
-	{
-		if (printers[i].spec == spec)
-			return (printers[i].fn);
-	}
-
-	return (NULL);
-}
-
-/**
- * _printf - produces output according to a format
- * @format: character string containing zero or more directives
- * Return: number of characters printed, or -1 on failure
+ * _printf - custom printf function
+ * @format: format string to parse
+ *
+ * Return: number of printed characters
  */
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int i, count = 0;
-	int (*handler)(va_list);
+	va_list args;          /* handle variable arguments */
+	int i = 0;             /* index for format string */
+	int count = 0;         /* total characters printed */
 
-	if (format == NULL)
+	if (!format)           /* null format string check */
 		return (-1);
 
-	va_start(ap, format);
-	for (i = 0; format[i] != '\0'; i++)
+	va_start(args, format); /* initialize argument list */
+
+	while (format && format[i])     /* loop through format chars */
 	{
-		if (format[i] != '%')
+		if (format[i] == '%')       /* check for format specifier */
 		{
-			if (_putchar(format[i]) == -1)
-			{
-				va_end(ap);
-				return (-1);
-			}
-			count++;
-			continue;
-		}
+			i++;                    /* move to specifier char */
 
-		i++;
-		if (format[i] == '\0')
-		{
-			va_end(ap);
-			return (-1);
-		}
+			/* handle integer formats */
+			if (format[i] == 'd' || format[i] == 'i')
+				count += print_number(va_arg(args, int));
 
-		handler = find_printer(format[i]);
-		if (handler != NULL)
-		{
-			int printed = handler(ap);
+			/* handle literal '%' */
+			else if (format[i] == '%')
+				count += _putchar('%');
 
-			if (printed == -1)
-			{
-				va_end(ap);
-				return (-1);
-			}
-			count += printed;
+			/* unrecognized specifier: print it literally */
+			else
+				count += _putchar(format[i]);
 		}
 		else
-		{
-			if (_putchar('%') == -1 || _putchar(format[i]) == -1)
-			{
-				va_end(ap);
-				return (-1);
-			}
-			count += 2;
-		}
+			count += _putchar(format[i]); /* normal character */
+
+		i++;        /* move to next character */
 	}
-	va_end(ap);
 
-	return (count);
+	va_end(args);           /* cleanup */
+	return (count);         /* return total printed chars */
 }
-
